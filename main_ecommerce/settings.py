@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'store',
     'carts',
     'orders',
+    'admin_honeypot',
 ]
 
 MIDDLEWARE = [
@@ -150,6 +151,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "Danger",
 }
 
+CSRF_TRUSTED_ORIGINS=['http://localhost', 'http://127.0.0.1']
 
 EMAIL_HOST = config('EMAIL_HOST')  
 EMAIL_PORT = config('EMAIL_PORT', cast=int)  
