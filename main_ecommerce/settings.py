@@ -27,7 +27,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['127.0.0.1','shoppingonline.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['shoppingonline.up.railway.app','http://shoppingonline.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://shoppingonline.up.railway.app']
 
 # Application definition
 
