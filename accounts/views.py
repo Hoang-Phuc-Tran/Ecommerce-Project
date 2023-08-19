@@ -5,6 +5,7 @@ from orders.models import Order, OrderProduct
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # Verification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -39,7 +40,7 @@ def register(request):
             profile.user_id = user.id
             profile.profile_picture = 'default/default-user.png'
             profile.save()
-            
+
             # USER ACTIVATION
             current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
@@ -52,19 +53,19 @@ def register(request):
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            
+
             return redirect('/accounts/login/?command=verification&email='+email)
         else:
             pass
     else:
         form = RegistrationForm()
-    
+
     context = {
         'form': form,
     }
     return render(request, 'accounts/register.html', context)
 
-
+@csrf_exempt
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -127,13 +128,13 @@ def login(request):
         else:
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
-        
+
     return render(request, 'accounts/login.html')
 
 @login_required(login_url = 'login')
 def logout(request):
     auth.logout(request)
-    messages.success(request, 'You are logged out')    
+    messages.success(request, 'You are logged out')
     return redirect('login')
 
 
@@ -160,7 +161,7 @@ def dashboard(request):
     orders_count = orders.count()
 
     userprofile = UserProfile.objects.get(user_id=request.user.id)
-    
+
     context = {
         'orders_count': orders_count,
         'userprofile': userprofile,
@@ -175,7 +176,7 @@ def forgotPassword(request):
         email = request.POST['email']
         if Account.objects.filter(email=email).exists():
             user = Account.objects.get(email__exact=email)
-            
+
             # Reset Password
             current_site = get_current_site(request)
             mail_subject = 'Reset Your Password'
@@ -194,15 +195,15 @@ def forgotPassword(request):
             messages.error(request, 'Account does not exist')
             return redirect('forgotPassword')
     return render(request, 'accounts/forgotPassword.html')
-    
-    
+
+
 def resetpassword_validate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = Account._default_manager.get(pk=uid)
     except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
         user = None
-        
+
     if user is not None and default_token_generator.check_token(user, token):
         request.session['uid'] = uid
         messages.success(request, 'Please reset your password')
@@ -216,7 +217,7 @@ def resetPassword(request):
     if request.method == 'POST':
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-        
+
         if password == confirm_password:
             uid = request.session.get('uid')
             user = Account.objects.get(pk=uid)
@@ -229,9 +230,9 @@ def resetPassword(request):
             return redirect('resetPassword')
     else:
         return render(request, 'accounts/resetPassword.html')
-        
 
-            
+
+
 @login_required(login_url='login')
 def my_orders(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
@@ -261,7 +262,7 @@ def edit_profile(request):
         'userprofile': userprofile,
     }
     return render(request, 'accounts/edit_profile.html', context)
-    
+
 
 @login_required(login_url='login')
 def change_password(request):
@@ -303,6 +304,5 @@ def order_detail(request, order_id):
         'subtotal': subtotal,
     }
     return render(request, 'accounts/order_detail.html', context)
-    
-            
-        
+
+
