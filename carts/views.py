@@ -5,18 +5,22 @@ from .models import Cart, CartItem
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
+@csrf_exempt
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
         cart = request.session.create()
     return cart
 
+@csrf_exempt
 def add_cart(request, product_id):
     current_user = request.user
     product = Product.objects.get(id=product_id) #get product
-    
+
     # Check if user is authenticated
     if current_user.is_authenticated:
         product_variation = []
@@ -24,18 +28,18 @@ def add_cart(request, product_id):
             for item in request.POST:
                 key = item
                 value = request.POST[key]
-                
+
                 try:
                     variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
                     product_variation.append(variation)
                 except:
                     Pass
-        
+
         # Check if the variation is exist or not in the same product
         is_cart_item_exists = CartItem.objects.filter(product=product, user=current_user).exists()
         if is_cart_item_exists:
             cart_item = CartItem.objects.filter(product=product, user=current_user)
-            
+
             ex_var_list = []        #this list contains variations of a product
             id = []         #contains list of ID product
             # Get the variation in the db and put it in the list
@@ -43,7 +47,7 @@ def add_cart(request, product_id):
                 existing_variation = item.variations.all()
                 ex_var_list.append(list(existing_variation))
                 id.append(item.id)
-            
+
             # check if the variation is already in the db
             if product_variation in ex_var_list:
                 # Get the index of the product which contains found variations
@@ -77,13 +81,13 @@ def add_cart(request, product_id):
             for item in request.POST:
                 key = item
                 value = request.POST[key]
-                
+
                 try:
                     variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
                     product_variation.append(variation)
                 except:
                     Pass
-        
+
         try:
             cart = Cart.objects.get(cart_id=_cart_id(request))      # get the cart using the cart_id in the session request
         except Cart.DoesNotExist:
@@ -91,12 +95,12 @@ def add_cart(request, product_id):
                 cart_id = _cart_id(request)
             )
         cart.save()
-        
+
         # Check if the variation is exist or not in the same product
         is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
         if is_cart_item_exists:
             cart_item = CartItem.objects.filter(product=product, cart=cart)
-            
+
             ex_var_list = []        #this list contains variations of a product
             id = []         #contains list of ID product
             # Get the variation in the db and put it in the list
@@ -104,7 +108,7 @@ def add_cart(request, product_id):
                 existing_variation = item.variations.all()
                 ex_var_list.append(list(existing_variation))
                 id.append(item.id)
-            
+
             # check if the variation is already in the db
             if product_variation in ex_var_list:
                 # Get the index of the product which contains found variations
@@ -132,7 +136,7 @@ def add_cart(request, product_id):
             cart_item.save()
         return redirect('cart')
 
-
+@csrf_exempt
 def remove_cart(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
     try:
@@ -150,6 +154,7 @@ def remove_cart(request, product_id, cart_item_id):
         pass
     return redirect('cart')
 
+@csrf_exempt
 def remove_cart_item(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
     if request.user.is_authenticated:
@@ -160,6 +165,7 @@ def remove_cart_item(request, product_id, cart_item_id):
     cart_item.delete()
     return redirect('cart')
 
+@csrf_exempt
 def cart(request, total=0, quantity=0, cart_items=None):
     tax = 0
     quantity = 0
@@ -173,12 +179,12 @@ def cart(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
-        
+
         tax = (13 * total) / 100
         grand_total = round(total + tax, 2)
     except ObjectDoesNotExist:
         pass
-            
+
     context = {
         'total': total,
         'quantity': quantity,
@@ -202,12 +208,12 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
-        
+
         tax = (13 * total) / 100
         grand_total = round(total + tax, 2)
     except ObjectDoesNotExist:
         pass
-        
+
     context = {
         'total': total,
         'quantity': quantity,

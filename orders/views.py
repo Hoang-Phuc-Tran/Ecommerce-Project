@@ -8,8 +8,11 @@ import json
 from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
+@csrf_exempt
 def payments(request):
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
@@ -41,14 +44,14 @@ def payments(request):
         orderproduct.product_price = item.product.price
         orderproduct.ordered = True
         orderproduct.save()
-        
+
         # Save variations to orderproduct table
         cart_item = CartItem.objects.get(id=item.id)
         product_variation = cart_item.variations.all()
         orderproduct = OrderProduct.objects.get(id=orderproduct.id)
         orderproduct.variations.set(product_variation)
         orderproduct.save()
-        
+
         # Reduce the quantity of the sold products
         product = Product.objects.get(id=item.product_id)
         product.stock -= item.quantity
@@ -56,7 +59,7 @@ def payments(request):
 
     # Clear cart
     CartItem.objects.filter(user=request.user).delete()
-    
+
     # Send order recieved email to customer
     mail_subject = 'Thank you for your order!'
     message = render_to_string('orders/order_recieved_email.html', {
@@ -66,7 +69,7 @@ def payments(request):
     to_email = request.user.email
     send_email = EmailMessage(mail_subject, message, to=[to_email])
     send_email.send()
-    
+
     # Send order number and transaction id back to sendData method via JsonResponse
     data = {
         'order_number': order.order_number,
@@ -74,7 +77,7 @@ def payments(request):
     }
     return JsonResponse(data)
 
-
+@csrf_exempt
 def place_order(request, total=0, quantity=0,):
     current_user = request.user
 
@@ -121,7 +124,7 @@ def place_order(request, total=0, quantity=0,):
             order_number = current_date + str(data.id)
             data.order_number = order_number
             data.save()
-            
+
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
                 'order': order,
@@ -133,9 +136,9 @@ def place_order(request, total=0, quantity=0,):
             return render(request, 'orders/payments.html', context)
     else:
         return redirect('checkout')
-    
-    
 
+
+@csrf_exempt
 def order_complete(request):
     order_number = request.GET.get('order_number')
     transID = request.GET.get('payment_id')
