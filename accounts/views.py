@@ -21,6 +21,7 @@ import requests
 
 
 # Create your views here.
+@csrf_exempt
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -137,7 +138,7 @@ def logout(request):
     messages.success(request, 'You are logged out')
     return redirect('login')
 
-
+@csrf_exempt
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -170,7 +171,7 @@ def dashboard(request):
 
 
 
-
+@csrf_exempt
 def forgotPassword(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -196,7 +197,7 @@ def forgotPassword(request):
             return redirect('forgotPassword')
     return render(request, 'accounts/forgotPassword.html')
 
-
+@csrf_exempt
 def resetpassword_validate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -212,7 +213,7 @@ def resetpassword_validate(request, uidb64, token):
         messages.error(request, 'This link has been expired')
         return redirect('login')
 
-
+@csrf_exempt
 def resetPassword(request):
     if request.method == 'POST':
         password = request.POST['password']
