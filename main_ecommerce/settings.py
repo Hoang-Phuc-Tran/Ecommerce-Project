@@ -25,9 +25,9 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['https://shoppingonline.up.railway.app']
+ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ['https://shoppingonline.up.railway.app/cart/add_cart/', 'https://shoppingonline.up.railway.app','https://shoppingonline.up.railway.app/cart/add_cart']
+CSRF_TRUSTED_ORIGINS = ['https://shoppingonline.up.railway.app','https://shoppingonline.up.railway.app/cart/add_cart', 'https://shoppingonline.up.railway.app']
 
 # Application definition
 
