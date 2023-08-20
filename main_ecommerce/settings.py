@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ["*"]
 
 #CSRF_TRUSTED_ORIGINS = ['https://shoppingonline.up.railway.app', 'shoppingonline.up.railway.app', 'www.shoppingonline.up.railway.app', 'http://shoppingonline.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.ecommerce-project-production-ed55.up.railway.app','https://ecommerce-project-production-ed55.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://*.shoppingonline.up.railway.app','https://shoppingonline.up.railway.app']
 # Application definition
 
 INSTALLED_APPS = [
