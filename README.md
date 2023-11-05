@@ -1,6 +1,6 @@
 # E-Commerce Website
- 
-https://github.com/Hoang-Phuc-Tran/Ecommerce-Project/assets/120700092/4534a116-922e-403e-91e1-3cc4348346f0
+
+https://github.com/Hoang-Phuc-Tran/Ecommerce-Project/assets/120700092/8dc2d4b8-e78a-47c7-99cb-83bb75f60d85
 
 <h1> https://shoppingonline.up.railway.app/ </h1>
 
