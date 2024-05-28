@@ -11,12 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
+      - uses: actions/checkout@v3 # Update this to the latest version supporting Node.js 20
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3 # Update this to the latest version supporting Node.js 20
         with:
-          python-version: "3.8"
+          python-color: "3.8"
 
       - name: Install dependencies
         run: |
