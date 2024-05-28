@@ -28,7 +28,11 @@ jobs:
           # Replace this with your test command
           python -m unittest discover -s tests
 
+      - name: Install Railway CLI
+        run: npm install -g railway
+
+      - name: Login to Railway
+        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+
       - name: Deploy to Railway
-        uses: railway up
-        with:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up
