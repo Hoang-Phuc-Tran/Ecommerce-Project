@@ -27,3 +27,8 @@ jobs:
         run: |
           # Replace this with your test command
           python -m unittest discover -s tests
+
+      - name: Deploy to Railway
+        uses: railwayapp/actions/deploy@v1.2
+        with:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
