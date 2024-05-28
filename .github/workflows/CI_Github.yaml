@@ -29,6 +29,6 @@ jobs:
           python -m unittest discover -s tests
 
       - name: Deploy to Railway
-        uses: railwayapp/actions/deploy@v1.2
+        uses: railway up
         with:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
