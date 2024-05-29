@@ -3,7 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import unittest
 from selenium import webdriver
-from .login_page import LoginPage
+from tests.login_page import LoginPage
 import time
 from selenium.webdriver.support.ui import Select
 
