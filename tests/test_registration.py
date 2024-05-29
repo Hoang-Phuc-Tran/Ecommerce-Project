@@ -28,7 +28,7 @@ class TestRegistration(unittest.TestCase):
         last_name = driver.find_element(By.NAME, "last_name")
         phone_number = driver.find_element(By.NAME, "phone_number")
         email_input = driver.find_element(By.NAME, "email")
-        password_input = driver.find_felement(By.NAME, "password")
+        password_input = driver.find_element(By.NAME, "password")
         confirm_password_input = driver.find_element(By.NAME, "confirm_password")
 
         register_btn = driver.find_element(By.CSS_SELECTOR, "button.btn.btn-primary.btn-block")
