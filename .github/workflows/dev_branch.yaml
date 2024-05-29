@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: Install Chrome
+      - name: Install Google Chrome
         run: |
           sudo apt-get update
           sudo apt-get install -y wget xvfb libappindicator3-1 fonts-liberation libasound2 libnspr4 libnss3 libxss1 xdg-utils
