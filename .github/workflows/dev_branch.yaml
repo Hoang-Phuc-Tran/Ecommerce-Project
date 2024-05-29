@@ -17,23 +17,23 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: Install Google Chrome
+      - name: Install Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget xvfb libappindicator3-1 fonts-liberation libasound2 libnspr4 libnss3 libxss1 xdg-utils
+          sudo apt-get install -y wget xvfb
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || true
           sudo apt-get install -f
 
-      - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
-      - name: Start Xvfb (for headless testing with visual support)
+      - name: Install ChromeDriver
         run: |
-          sudo apt-get install -y xvfb
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+          CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/bin/chromedriver
+          sudo chown root:root /usr/bin/chromedriver
+          sudo chmod +x /usr/bin/chromedriver
 
       - name: Install dependencies
         run: |
