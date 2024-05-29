@@ -17,15 +17,18 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: Install Chrome and ChromeDriver
+      - name: Install Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget xvfb libappindicator1 fonts-liberation libasound2 libnspr4 libnss3 libxss1 xdg-utils
+          sudo apt-get install -y wget xvfb libappindicator3-1 fonts-liberation libasound2 libnspr4 libnss3 libxss1 xdg-utils
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i google-chrome-stable_current_amd64.deb
           sudo apt-get install -f
-          CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
-          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //; s/\..*//')
+          CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
           wget "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/chromedriver
