@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 import unittest
 from selenium import webdriver
@@ -9,8 +10,15 @@ from selenium.webdriver.support.ui import Select
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Chrome()  # Or path to the WebDriver
-        self.driver.maximize_window()  # Maximizes the browser window
+         # Set up Chrome options
+        options = Options()
+        options.add_argument("--headless")  # Runs Chrome in headless mode.
+        options.add_argument('--no-sandbox')  # Bypass OS security model
+        options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
+        options.add_argument('start-maximized')  # Start maximized
+        options.add_argument('disable-infobars')
+        options.add_argument('--disable-extensions')
+        self.driver = webdriver.Chrome(options=options)
         self.driver.get("https://shoppingonline.up.railway.app/accounts/login/")  # Adjust the URL
 
     def test_login_success(self):
