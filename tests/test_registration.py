@@ -49,6 +49,6 @@ class TestRegistration(unittest.TestCase):
         self.assertIn("Account with this Email already exists.", confirmation_message.text)
 
     def tearDown(self):
-        time.sleep(3)  # Allow some time before closing the browser
+        time.sleep(1)  # Allow some time before closing the browser
         self.driver.quit()
 

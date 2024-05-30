@@ -43,7 +43,7 @@ class TestLogin(unittest.TestCase):
         # Create a Select object
         select = Select(dropdown_size)
         # Select by visible text
-        select.select_family_by_visible_text("Small")
+        select.select_by_visible_text("Small")
 
         add_to_cart_button = self.driver.find_element(By.CSS_SELECTOR, "button.btn.btn-primary:has(span.text)")
         add_to_cart_button.click()
@@ -57,7 +57,7 @@ class TestLogin(unittest.TestCase):
         remove_link.click()
 
          # Handle the alert by accepting it (clicking "OK")
-        WebDriverWait(self.response_driver, 10).until(EC.alert_is_present(),
+        WebDriverWait(self.driver, 10).until(EC.alert_is_present(),
                                               "Timed out waiting for confirmation popup to appear.")
 
         alert = self.driver.switch_to.alert

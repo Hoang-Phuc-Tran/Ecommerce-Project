@@ -68,5 +68,5 @@ class TestDropdownSelection(unittest.TestCase):
         self.assertIn("Add to Cart", add_cart.text)
 
     def tearDown(self):
-        time.sleep(3)
+        time.sleep(1)
         self.driver.quit()

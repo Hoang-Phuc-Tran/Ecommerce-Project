@@ -62,5 +62,5 @@ class TestLogin(unittest.TestCase):
         self.assertEqual("Your Shopping Cart is Empty", empty_cart_message.text, "The cart is not empty as expected.")
 
     def tearDown(self):
-        time.sleep(3)
+        time.sleep(1)
         self.driver.quit()
